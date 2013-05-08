@@ -230,4 +230,36 @@
     return cell;
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(scrollViewWillBeginDragging:)])
+    {
+        [self.bubbleDelegate scrollViewWillBeginDragging:scrollView];
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(scrollViewWillEndDragging:withVelocity:targetContentOffset:)])
+    {
+        [self.bubbleDelegate scrollViewWillEndDragging:scrollView withVelocity:velocity targetContentOffset:targetContentOffset];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)])
+    {
+        [self.bubbleDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(scrollViewDidScroll:)])
+    {
+        [self.bubbleDelegate scrollViewDidScroll:scrollView];
+    }
+}
+
 @end
