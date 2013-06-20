@@ -12,6 +12,7 @@
 #import "NSBubbleData.h"
 #import "UIBubbleHeaderTableViewCell.h"
 #import "UIBubbleTypingTableViewCell.h"
+#import "UIBubbleNotificationTableViewCell.h"
 
 @interface UIBubbleTableView ()
 
@@ -184,7 +185,14 @@
     }
     
     NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
-    return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom, self.showAvatars ? 52 : 0);
+    
+    int minHeight = 52;         // for avatars
+    if (data.type == BubbleTypeNotification)
+    {
+        minHeight = 0;
+    }
+    
+    return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom, self.showAvatars ? minHeight : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -217,10 +225,28 @@
         return cell;
     }
     
+    // Notifcation bubble
+    NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
+    if (data.type == BubbleTypeNotification)
+    {
+        static NSString *cellId = @"tblBubbleNotificationCell";
+        UIBubbleNotificationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
+        
+        if (cell == nil) cell = [[UIBubbleNotificationTableViewCell alloc] init];
+        
+        cell.data = data;
+        
+        // fixme - run this through the NSBubbleData object
+        cell.showAvatar = false;
+        
+        return cell;
+    }
+
+    
     // Standard bubble    
     static NSString *cellId = @"tblBubbleCell";
     UIBubbleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
     
     if (cell == nil) cell = [[UIBubbleTableViewCell alloc] init];
     
