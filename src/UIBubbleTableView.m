@@ -195,7 +195,7 @@
     int adjustHeight = 0;
     if (data.avatarLabelStr != nil)
     {
-        adjustHeight = 40;
+        adjustHeight = 20;
     }
     
     return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom + adjustHeight, self.showAvatars ? minHeight : 0);

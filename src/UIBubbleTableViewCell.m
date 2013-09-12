@@ -104,31 +104,6 @@
         if (type == BubbleTypeSomeoneElse) x += 54;
         if (type == BubbleTypeMine) x -= 54;
     }
-    
-    if (self.data.avatarLabelStr != nil)
-    {
-        [self.avatarLabel removeFromSuperview];
-#if !__has_feature(objc_arc)
-        self.avatarLabel = [[[UILabel alloc] init] autorelease];
-#else
-        self.avatarLabel = [[UILabel alloc] init];
-#endif
-        
-        self.avatarLabel.text = self.data.avatarLabelStr;
-        
-        self.avatarLabel.backgroundColor = [UIColor clearColor];
-        
-        self.avatarLabel.font = [UIFont boldSystemFontOfSize:12];
-        
-        CGFloat avatarLabelX = 2
-        CGFloat avatarLabelY = self.frame.size.height - 75;
-        
-        
-        self.avatarLabel.frame = CGRectMake(avatarLabelX, avatarLabelY, 200, 30);
-        [self addSubview:self.avatarLabel];
-    }
-
-
 
     [self.customView removeFromSuperview];
     self.customView = self.data.view;
@@ -145,6 +120,31 @@
     }
 
     self.bubbleImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
+    
+
+    if (self.data.avatarLabelStr != nil)
+    {
+        [self.avatarLabel removeFromSuperview];
+#if !__has_feature(objc_arc)
+        self.avatarLabel = [[[UILabel alloc] init] autorelease];
+#else
+        self.avatarLabel = [[UILabel alloc] init];
+#endif
+        
+        self.avatarLabel.text = self.data.avatarLabelStr;
+        
+        self.avatarLabel.backgroundColor = [UIColor clearColor];
+        
+        self.avatarLabel.font = [UIFont boldSystemFontOfSize:12];
+        
+        CGFloat avatarLabelX = self.bubbleImage.frame.origin.x + 10;
+        CGFloat avatarLabelY = self.bubbleImage.frame.origin.y - 24;
+        
+        
+        self.avatarLabel.frame = CGRectMake(avatarLabelX, avatarLabelY, 200, 30);
+        [self.contentView addSubview:self.avatarLabel];
+    }
+
 }
 
 @end
