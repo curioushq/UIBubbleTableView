@@ -17,6 +17,7 @@
 @property (nonatomic, retain) UIView *customView;
 @property (nonatomic, retain) UIImageView *bubbleImage;
 @property (nonatomic, retain) UIImageView *avatarImage;
+@property (nonatomic, retain) UILabel *avatarLabel;
 
 - (void) setupInternalData;
 
@@ -29,6 +30,7 @@
 @synthesize bubbleImage = _bubbleImage;
 @synthesize showAvatar = _showAvatar;
 @synthesize avatarImage = _avatarImage;
+@synthesize avatarLabel = _avatarLabel;
 
 - (void)setFrame:(CGRect)frame
 {
@@ -43,6 +45,7 @@
     self.customView = nil;
     self.bubbleImage = nil;
     self.avatarImage = nil;
+    self.avatarLabel = nil;
     [super dealloc];
 }
 #endif
@@ -101,6 +104,31 @@
         if (type == BubbleTypeSomeoneElse) x += 54;
         if (type == BubbleTypeMine) x -= 54;
     }
+    
+    if (self.data.avatarLabelStr != nil)
+    {
+        [self.avatarLabel removeFromSuperview];
+#if !__has_feature(objc_arc)
+        self.avatarLabel = [[[UILabel alloc] init] autorelease];
+#else
+        self.avatarLabel = [[UILabel alloc] init];
+#endif
+        
+        self.avatarLabel.text = self.data.avatarLabelStr;
+        
+        self.avatarLabel.backgroundColor = [UIColor clearColor];
+        
+        self.avatarLabel.font = [UIFont boldSystemFontOfSize:12];
+        
+        CGFloat avatarLabelX = 2
+        CGFloat avatarLabelY = self.frame.size.height - 75;
+        
+        
+        self.avatarLabel.frame = CGRectMake(avatarLabelX, avatarLabelY, 200, 30);
+        [self addSubview:self.avatarLabel];
+    }
+
+
 
     [self.customView removeFromSuperview];
     self.customView = self.data.view;

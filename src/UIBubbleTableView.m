@@ -192,7 +192,13 @@
         minHeight = 0;
     }
     
-    return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom, self.showAvatars ? minHeight : 0);
+    int adjustHeight = 0;
+    if (data.avatarLabelStr != nil)
+    {
+        adjustHeight = 40;
+    }
+    
+    return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom + adjustHeight, self.showAvatars ? minHeight : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
