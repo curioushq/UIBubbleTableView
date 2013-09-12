@@ -20,6 +20,7 @@
 @synthesize view = _view;
 @synthesize insets = _insets;
 @synthesize avatar = _avatar;
+@synthesize avatarLabelStr = _avatarLabelStr;
 
 #pragma mark - Lifecycle
 
@@ -32,6 +33,7 @@
     _view = nil;
     
     self.avatar = nil;
+    self.avatarLabelStr = nil;
 
     [super dealloc];
 }
