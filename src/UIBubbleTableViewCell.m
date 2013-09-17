@@ -122,7 +122,7 @@
     self.bubbleImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
     
 
-    if (self.data.avatarLabelStr != nil)
+    if (self.data.avatarLabelStr != nil && type == BubbleTypeSomeoneElse)
     {
         [self.avatarLabel removeFromSuperview];
 #if !__has_feature(objc_arc)
@@ -132,14 +132,12 @@
 #endif
         
         self.avatarLabel.text = self.data.avatarLabelStr;
-        
         self.avatarLabel.backgroundColor = [UIColor clearColor];
-        
-        self.avatarLabel.font = [UIFont boldSystemFontOfSize:12];
+        self.avatarLabel.font = [UIFont systemFontOfSize:12];
+        self.avatarLabel.textColor = [UIColor grayColor];
         
         CGFloat avatarLabelX = self.bubbleImage.frame.origin.x + 10;
         CGFloat avatarLabelY = self.bubbleImage.frame.origin.y - 24;
-        
         
         self.avatarLabel.frame = CGRectMake(avatarLabelX, avatarLabelY, 200, 30);
         [self.contentView addSubview:self.avatarLabel];
