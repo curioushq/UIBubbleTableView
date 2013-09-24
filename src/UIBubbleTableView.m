@@ -123,7 +123,7 @@
              NSBubbleData *bubbleData1 = (NSBubbleData *)obj1;
              NSBubbleData *bubbleData2 = (NSBubbleData *)obj2;
              
-             return [bubbleData1.date compare:bubbleData2.date];            
+             return [bubbleData1.date compare:bubbleData2.date];
          }];
         
         NSDate *last = [NSDate dateWithTimeIntervalSince1970:0];
@@ -203,6 +203,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     // Now typing
 	if (indexPath.section >= [self.bubbleSection count])
     {
@@ -210,13 +211,15 @@
         UIBubbleTypingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
         if (cell == nil) cell = [[UIBubbleTypingTableViewCell alloc] init];
-
+        
         cell.type = self.typingBubble;
         cell.showAvatar = self.showAvatars;
         
+        cell.backgroundColor = [UIColor clearColor];
+        
         return cell;
     }
-
+    
     // Header with date and time
     if (indexPath.row == 0)
     {
@@ -225,9 +228,11 @@
         NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:0];
         
         if (cell == nil) cell = [[UIBubbleHeaderTableViewCell alloc] init];
-
+        
         cell.date = data.date;
-       
+        
+        cell.backgroundColor = [UIColor clearColor];
+        
         return cell;
     }
     
@@ -246,11 +251,13 @@
         // fixme - run this through the NSBubbleData object
         cell.showAvatar = false;
         
+        cell.backgroundColor = [UIColor clearColor];
+        
         return cell;
     }
-
     
-    // Standard bubble    
+    
+    // Standard bubble
     static NSString *cellId = @"tblBubbleCell";
     UIBubbleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     
@@ -258,6 +265,8 @@
     
     cell.data = data;
     cell.showAvatar = self.showAvatars;
+    
+    cell.backgroundColor = [UIColor clearColor];
     
     return cell;
 }
