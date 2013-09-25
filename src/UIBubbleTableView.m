@@ -201,6 +201,30 @@
     return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom + adjustHeight, self.showAvatars ? minHeight : 0);
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (self.blankFooterSpace > 0 && section == [self.bubbleSection count] - 1)
+    {
+        UIView *footer = [[UIView alloc] init];
+        footer.userInteractionEnabled = NO;
+        footer.frame = CGRectMake(0, 0, self.blankFooterSpace, 1);
+        footer.backgroundColor = [UIColor clearColor];
+        return footer;
+    }
+    
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (self.blankFooterSpace > 0 && section == [self.bubbleSection count] - 1)
+    {
+        return self.blankFooterSpace;
+    }
+    
+    return 0;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
