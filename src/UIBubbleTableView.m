@@ -207,7 +207,7 @@
     {
         UIView *footer = [[UIView alloc] init];
         footer.userInteractionEnabled = NO;
-        footer.frame = CGRectMake(0, 0, self.blankFooterSpace, 1);
+        footer.frame = CGRectMake(0, 0, 1, self.blankFooterSpace);
         footer.backgroundColor = [UIColor clearColor];
         return footer;
     }
