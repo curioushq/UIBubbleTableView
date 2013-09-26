@@ -56,7 +56,7 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type
 {
-    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    UIFont *font = [UIFont fontWithName:@"Helvetica" size:15];
 
     UILabel* label = nil;    
     if (type == BubbleTypeNotification)
