@@ -21,6 +21,9 @@
 		76ED208715BF09E300E186D3 /* UIBubbleTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76ED208615BF09E300E186D3 /* UIBubbleTableView.m */; };
 		76ED208B15BF0BB100E186D3 /* NSBubbleData.m in Sources */ = {isa = PBXBuildFile; fileRef = 76ED208A15BF0BB100E186D3 /* NSBubbleData.m */; };
 		76ED209415BF29EE00E186D3 /* UIBubbleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76ED209315BF29EE00E186D3 /* UIBubbleTableViewCell.m */; };
+		B75A3107188839A300DEE0D1 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B75A3104188839A300DEE0D1 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		B75A3108188839A300DEE0D1 /* UIBubbleNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B75A3106188839A300DEE0D1 /* UIBubbleNotificationTableViewCell.m */; };
+		B7715F68188830E200FC5E1D /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7715F67188830E200FC5E1D /* CoreText.framework */; };
 		C836D5CA1625CBA5004CB4A9 /* missingAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = C836D5C81625CBA5004CB4A9 /* missingAvatar.png */; };
 		C836D5CB1625CBA5004CB4A9 /* missingAvatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C836D5C91625CBA5004CB4A9 /* missingAvatar@2x.png */; };
 		C836D5CE1625D718004CB4A9 /* avatar1.png in Resources */ = {isa = PBXBuildFile; fileRef = C836D5CD1625D718004CB4A9 /* avatar1.png */; };
@@ -62,6 +65,11 @@
 		76ED208A15BF0BB100E186D3 /* NSBubbleData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSBubbleData.m; path = ../../src/NSBubbleData.m; sourceTree = "<group>"; };
 		76ED209215BF29EE00E186D3 /* UIBubbleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIBubbleTableViewCell.h; path = ../../src/UIBubbleTableViewCell.h; sourceTree = "<group>"; };
 		76ED209315BF29EE00E186D3 /* UIBubbleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIBubbleTableViewCell.m; path = ../../src/UIBubbleTableViewCell.m; sourceTree = "<group>"; };
+		B75A3103188839A300DEE0D1 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
+		B75A3104188839A300DEE0D1 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		B75A3105188839A300DEE0D1 /* UIBubbleNotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIBubbleNotificationTableViewCell.h; path = ../../src/UIBubbleNotificationTableViewCell.h; sourceTree = "<group>"; };
+		B75A3106188839A300DEE0D1 /* UIBubbleNotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIBubbleNotificationTableViewCell.m; path = ../../src/UIBubbleNotificationTableViewCell.m; sourceTree = "<group>"; };
+		B7715F67188830E200FC5E1D /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		C836D5C81625CBA5004CB4A9 /* missingAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = missingAvatar.png; sourceTree = "<group>"; };
 		C836D5C91625CBA5004CB4A9 /* missingAvatar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "missingAvatar@2x.png"; sourceTree = "<group>"; };
 		C836D5CD1625D718004CB4A9 /* avatar1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar1.png; sourceTree = SOURCE_ROOT; };
@@ -82,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7715F68188830E200FC5E1D /* CoreText.framework in Frameworks */,
 				76ED206315BF096C00E186D3 /* UIKit.framework in Frameworks */,
 				76ED206515BF096C00E186D3 /* Foundation.framework in Frameworks */,
 				76ED206715BF096C00E186D3 /* CoreGraphics.framework in Frameworks */,
@@ -111,6 +120,7 @@
 		76ED206115BF096C00E186D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B7715F67188830E200FC5E1D /* CoreText.framework */,
 				76ED206215BF096C00E186D3 /* UIKit.framework */,
 				76ED206415BF096C00E186D3 /* Foundation.framework */,
 				76ED206615BF096C00E186D3 /* CoreGraphics.framework */,
@@ -151,6 +161,9 @@
 		76ED208315BF09AD00E186D3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B75A3102188839A300DEE0D1 /* TTTAttributedLabel */,
+				B75A3105188839A300DEE0D1 /* UIBubbleNotificationTableViewCell.h */,
+				B75A3106188839A300DEE0D1 /* UIBubbleNotificationTableViewCell.m */,
 				76ED208915BF0BB100E186D3 /* NSBubbleData.h */,
 				76ED208A15BF0BB100E186D3 /* NSBubbleData.m */,
 				76ED208515BF09E300E186D3 /* UIBubbleTableView.h */,
@@ -164,6 +177,16 @@
 				76ED208815BF0B4400E186D3 /* UIBubbleTableViewDataSource.h */,
 			);
 			name = src;
+			sourceTree = "<group>";
+		};
+		B75A3102188839A300DEE0D1 /* TTTAttributedLabel */ = {
+			isa = PBXGroup;
+			children = (
+				B75A3103188839A300DEE0D1 /* TTTAttributedLabel.h */,
+				B75A3104188839A300DEE0D1 /* TTTAttributedLabel.m */,
+			);
+			name = TTTAttributedLabel;
+			path = ../../src/TTTAttributedLabel;
 			sourceTree = "<group>";
 		};
 		C83B107015DE43180067DADE /* images */ = {
@@ -264,10 +287,12 @@
 				76ED207315BF096C00E186D3 /* AppDelegate.m in Sources */,
 				76ED207615BF096C00E186D3 /* ViewController.m in Sources */,
 				76ED208715BF09E300E186D3 /* UIBubbleTableView.m in Sources */,
+				B75A3108188839A300DEE0D1 /* UIBubbleNotificationTableViewCell.m in Sources */,
 				76ED208B15BF0BB100E186D3 /* NSBubbleData.m in Sources */,
 				76ED209415BF29EE00E186D3 /* UIBubbleTableViewCell.m in Sources */,
 				76D097CC1621F0E000C17816 /* UIBubbleHeaderTableViewCell.m in Sources */,
 				76687AFD1622039C00707588 /* UIBubbleTypingTableViewCell.m in Sources */,
+				B75A3107188839A300DEE0D1 /* TTTAttributedLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
