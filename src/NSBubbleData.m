@@ -71,10 +71,17 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
     
     if (type == BubbleTypeNotification)
     {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.alignment = NSTextAlignmentCenter;
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [UIFont boldSystemFontOfSize:12], NSFontAttributeName,
-                                    [UIColor blackColor], NSForegroundColorAttributeName, nil];
+                                    [UIColor blackColor], NSForegroundColorAttributeName,
+                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
         [attributedText addAttributes:attributes range:NSMakeRange(0, attributedText.length)];
+        
+#if !__has_feature(objc_arc)
+        [paragraphStyle release];
+#endif
         
         // static width, variable height
         CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedText);
