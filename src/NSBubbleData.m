@@ -10,6 +10,11 @@
 
 #import "NSBubbleData.h"
 #import <QuartzCore/QuartzCore.h>
+#import "TTTAttributedLabel.h"
+#import <CoreText/CoreText.h>
+
+@interface NSBubbleData() <TTTAttributedLabelDelegate>
+@end
 
 @implementation NSBubbleData
 
@@ -56,35 +61,71 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type
 {
-    UIFont *font = [UIFont fontWithName:@"Helvetica" size:15];
-
-    UILabel* label = nil;    
+    if (text == nil)
+    {
+        text = @"";
+    }
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
+    
+    TTTAttributedLabel *label = nil;
+    
     if (type == BubbleTypeNotification)
     {
-        CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(300, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-        // static width, variable height
-        label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 300, size.height)];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.alignment = NSTextAlignmentCenter;
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIFont boldSystemFontOfSize:12], NSFontAttributeName,
+                                    [UIColor blackColor], NSForegroundColorAttributeName,
+                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
+        [attributedText addAttributes:attributes range:NSMakeRange(0, attributedText.length)];
         
-        label.font = [UIFont boldSystemFontOfSize:12];
+#if !__has_feature(objc_arc)
+        [paragraphStyle release];
+#endif
+        
+        // static width, variable height
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedText);
+        CGSize targetSize = CGSizeMake(300.f, CGFLOAT_MAX);
+        CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [text length]),
+                                                                      NULL, targetSize, NULL);
+        CFRelease(framesetter);
+
+        label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 300.f, fitSize.height)];
+        
         label.textAlignment = NSTextAlignmentCenter;
         label.shadowOffset = CGSizeMake(0, 1);
-        label.textColor = [UIColor blackColor];
         label.shadowColor = [UIColor whiteColor];
     }
     else
     {
-        CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-        label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-        label.font = font;
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIFont fontWithName:@"Helvetica" size:15], NSFontAttributeName,
+                                    [UIColor blackColor], NSForegroundColorAttributeName, nil];
+        [attributedText addAttributes:attributes range:NSMakeRange(0, text.length)];
+        
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedText);
+        CGSize targetSize = CGSizeMake(220.f, CGFLOAT_MAX);
+        CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [text length]),
+                                                                      NULL, targetSize, NULL);
+        CFRelease(framesetter);
+        
+        label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, fitSize.width, fitSize.height)];
+
+        label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+        label.linkAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithBool:YES], NSUnderlineStyleAttributeName,
+                                [UIColor blueColor], NSForegroundColorAttributeName,
+                                nil];
+        label.delegate = self;
     }
     
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.text = (text ? text : @"");
+    label.text = attributedText;
     label.backgroundColor = [UIColor clearColor];
-
     
 #if !__has_feature(objc_arc)
+    [attributedText release];
     [label autorelease];
 #endif
     
@@ -165,6 +206,13 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
         _insets = insets;
     }
     return self;
+}
+
+#pragma mark - TTTAttributedLabel Delegate
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 @end
