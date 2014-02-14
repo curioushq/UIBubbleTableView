@@ -13,5 +13,5 @@ Pod::Spec.new do |s|
   s.source_files = 'src/**/*.{h,m}'
   s.resources = "images/*.png"
 
-  s.dependency 'TTTAttributedLabel'
+  s.dependency 'Nimbus'
 end

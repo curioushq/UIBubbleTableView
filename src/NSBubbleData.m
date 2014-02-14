@@ -10,10 +10,10 @@
 
 #import "NSBubbleData.h"
 #import <QuartzCore/QuartzCore.h>
-#import "TTTAttributedLabel.h"
+#import "NIAttributedLabel.h"
 #import <CoreText/CoreText.h>
 
-@interface NSBubbleData() <TTTAttributedLabelDelegate>
+@interface NSBubbleData() <NIAttributedLabelDelegate>
 @end
 
 @implementation NSBubbleData
@@ -67,7 +67,7 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
     }
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
     
-    TTTAttributedLabel *label = nil;
+    NIAttributedLabel *label = nil;
     
     if (type == BubbleTypeNotification)
     {
@@ -90,7 +90,7 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
                                                                       NULL, targetSize, NULL);
         CFRelease(framesetter);
 
-        label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 300.f, fitSize.height)];
+        label = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 300.f, fitSize.height)];
         
         label.textAlignment = NSTextAlignmentCenter;
         label.shadowOffset = CGSizeMake(0, 1);
@@ -109,19 +109,19 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
                                                                       NULL, targetSize, NULL);
         CFRelease(framesetter);
         
-        label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, fitSize.width, fitSize.height)];
-
-        label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
-        label.linkAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSNumber numberWithBool:YES], NSUnderlineStyleAttributeName,
-                                [UIColor blueColor], NSForegroundColorAttributeName,
-                                nil];
+        label = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, fitSize.width, fitSize.height)];
+        
+        label.autoDetectLinks = YES;
+        label.linksHaveUnderlines = YES;
+        label.attributesForLinks = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIFont fontWithName:@"Helvetica" size:15], NSFontAttributeName,
+                                    [UIColor blueColor], NSForegroundColorAttributeName, nil];
         label.delegate = self;
     }
     
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.text = attributedText;
+    label.attributedText = attributedText;
     label.backgroundColor = [UIColor clearColor];
     
 #if !__has_feature(objc_arc)
@@ -208,11 +208,15 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     return self;
 }
 
-#pragma mark - TTTAttributedLabel Delegate
+#pragma mark - NIAttributedLabel Delegate
 
-- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+- (void)attributedLabel:(NIAttributedLabel *)attributedLabel
+didSelectTextCheckingResult:(NSTextCheckingResult *)result atPoint:(CGPoint)point;
 {
-    [[UIApplication sharedApplication] openURL:url];
+    if (result.resultType == NSTextCheckingTypeLink)
+    {
+        [[UIApplication sharedApplication] openURL:result.URL.absoluteURL];
+    }
 }
 
 @end
