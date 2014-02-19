@@ -48,6 +48,7 @@
     self.bubbleImage = nil;
     self.avatarImage = nil;
     self.avatarLabel = nil;
+    self.longPressTimer = nil;
     [super dealloc];
 }
 #endif
@@ -115,10 +116,12 @@
     if (type == BubbleTypeSomeoneElse)
     {
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleSomeoneSelected.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         
     }
     else {
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleMineSelected.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
     }
     
     self.bubbleImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
@@ -152,8 +155,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
-    NSLog(@"Touches began!!!");
-    
+
     [self.longPressTimer invalidate];
     self.longPressTimer = nil;
     
@@ -172,9 +174,7 @@
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesCancelled:touches withEvent:event];
-    
-    NSLog(@"Touches cancelled!!!");
-    
+
     [self.longPressTimer invalidate];
     self.longPressTimer = nil;
 }
@@ -182,9 +182,7 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesEnded:touches withEvent:event];
-    
-    NSLog(@"Touches ended!!!");
-    
+
     [self.longPressTimer invalidate];
     self.longPressTimer = nil;
 }
@@ -235,13 +233,22 @@
     return [super resignFirstResponder];
 }
 
+- (void)willHideEditMenu:(NSNotification *)note
+{
+    self.bubbleImage.highlighted = NO;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)longPressTimerDidFire:(NSTimer *)timer
 {
     self.longPressTimer = nil;
     
     if ([self becomeFirstResponder])
     {
-        NSLog(@"Became First Responder!!!");
+        self.bubbleImage.highlighted = YES;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willHideEditMenu:) name:UIMenuControllerWillHideMenuNotification object:nil];
         
         UIMenuController *theMenu = [UIMenuController sharedMenuController];
         CGRect selectionRect = self.customView.frame;
