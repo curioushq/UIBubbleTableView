@@ -147,7 +147,7 @@
     
 }
 
-#pragma mark - Touches handling
+#pragma mark - UIResponder subclassing
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -157,11 +157,12 @@
     [self.longPressTimer invalidate];
     self.longPressTimer = nil;
     
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+    
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
     if (CGRectContainsPoint(self.bubbleImage.frame, point))
     {
-        [self.longPressTimer invalidate];
         self.longPressTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self
                                                              selector:@selector(longPressTimerDidFire:)
                                                              userInfo:nil repeats:NO];
@@ -187,8 +188,6 @@
     [self.longPressTimer invalidate];
     self.longPressTimer = nil;
 }
-
-#pragma mark - Edit Menu managing
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
@@ -223,6 +222,19 @@
     }
 }
 
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)resignFirstResponder
+{
+    [self.longPressTimer invalidate];
+    self.longPressTimer = nil;
+    
+    return [super resignFirstResponder];
+}
+
 - (void)longPressTimerDidFire:(NSTimer *)timer
 {
     self.longPressTimer = nil;
@@ -236,21 +248,6 @@
         [theMenu setTargetRect:selectionRect inView:self];
         [theMenu setMenuVisible:YES animated:YES];
     }
-}
-
-#pragma mark - First Responder handling
-
-- (BOOL)canBecomeFirstResponder
-{
-    return YES;
-}
-
-- (BOOL)resignFirstResponder
-{
-    [self.longPressTimer invalidate];
-    self.longPressTimer = nil;
-    
-    return [super resignFirstResponder];
 }
 
 @end

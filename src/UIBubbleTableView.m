@@ -301,6 +301,8 @@
     {
         [self.bubbleDelegate scrollViewWillBeginDragging:scrollView];
     }
+    
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
