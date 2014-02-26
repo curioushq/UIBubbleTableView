@@ -18,6 +18,7 @@
 @property (nonatomic, retain) UIImageView *bubbleImage;
 @property (nonatomic, retain) UIImageView *avatarImage;
 @property (nonatomic, retain) UILabel *avatarLabel;
+@property (nonatomic, retain) NSTimer *longPressTimer;
 
 - (void) setupInternalData;
 
@@ -31,6 +32,7 @@
 @synthesize showAvatar = _showAvatar;
 @synthesize avatarImage = _avatarImage;
 @synthesize avatarLabel = _avatarLabel;
+@synthesize longPressTimer = _longPressTimer;
 
 - (void)setFrame:(CGRect)frame
 {
@@ -46,6 +48,7 @@
     self.bubbleImage = nil;
     self.avatarImage = nil;
     self.avatarLabel = nil;
+    self.longPressTimer = nil;
     [super dealloc];
 }
 #endif
@@ -65,7 +68,7 @@
 #if !__has_feature(objc_arc)
         self.bubbleImage = [[[UIImageView alloc] init] autorelease];
 #else
-        self.bubbleImage = [[UIImageView alloc] init];        
+        self.bubbleImage = [[UIImageView alloc] init];
 #endif
         [self addSubview:self.bubbleImage];
     }
@@ -74,7 +77,7 @@
     
     CGFloat width = self.data.view.frame.size.width;
     CGFloat height = self.data.view.frame.size.height;
-
+    
     CGFloat x = (type == BubbleTypeSomeoneElse) ? 0 : self.frame.size.width - width - self.data.insets.left - self.data.insets.right;
     CGFloat y = 0;
     
@@ -104,24 +107,26 @@
         if (type == BubbleTypeSomeoneElse) x += 54;
         if (type == BubbleTypeMine) x -= 54;
     }
-
+    
     [self.customView removeFromSuperview];
     self.customView = self.data.view;
     self.customView.frame = CGRectMake(x + self.data.insets.left, y + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
-
+    
     if (type == BubbleTypeSomeoneElse)
     {
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
-
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleSomeoneSelected.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+        
     }
     else {
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleMineSelected.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
     }
-
+    
     self.bubbleImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
     
-
+    
     if (self.data.avatarLabelStr != nil && type == BubbleTypeSomeoneElse)
     {
         [self.avatarLabel removeFromSuperview];
@@ -142,7 +147,114 @@
         self.avatarLabel.frame = CGRectMake(avatarLabelX, avatarLabelY, 200, 30);
         [self.contentView addSubview:self.avatarLabel];
     }
+    
+}
 
+#pragma mark - UIResponder subclassing
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+
+    [self.longPressTimer invalidate];
+    self.longPressTimer = nil;
+    
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+    
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:self];
+    if (CGRectContainsPoint(self.bubbleImage.frame, point))
+    {
+        self.longPressTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self
+                                                             selector:@selector(longPressTimerDidFire:)
+                                                             userInfo:nil repeats:NO];
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesCancelled:touches withEvent:event];
+
+    [self.longPressTimer invalidate];
+    self.longPressTimer = nil;
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+
+    [self.longPressTimer invalidate];
+    self.longPressTimer = nil;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    BOOL retVal = NO;
+    BOOL isTextContainer = ([self.customView isKindOfClass:[UILabel class]]
+                            || [self.customView isKindOfClass:[UITextView class]]
+                            || [self.customView isKindOfClass:[UITextField class]]);
+    
+    if (action == @selector(copy:) && isTextContainer)
+    {
+        retVal = YES;
+    }
+    else
+    {
+        retVal = [super canPerformAction:action withSender:sender];
+    }
+    
+    return retVal;
+}
+
+- (void)copy:(id)sender
+{
+    if ([self.customView respondsToSelector:@selector(attributedText)]
+        && [self.customView valueForKey:@"attributedText"] != nil)
+    {
+        [[UIPasteboard generalPasteboard] setString:[[self.customView valueForKey:@"attributedText"] string]];
+    }
+    else if ([self.customView respondsToSelector:@selector(text)]
+             && [self.customView valueForKey:@"text"] != nil)
+    {
+        [[UIPasteboard generalPasteboard] setString:[self.customView valueForKey:@"text"]];
+    }
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)resignFirstResponder
+{
+    [self.longPressTimer invalidate];
+    self.longPressTimer = nil;
+    
+    return [super resignFirstResponder];
+}
+
+- (void)willHideEditMenu:(NSNotification *)note
+{
+    self.bubbleImage.highlighted = NO;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)longPressTimerDidFire:(NSTimer *)timer
+{
+    self.longPressTimer = nil;
+    
+    if ([self becomeFirstResponder])
+    {
+        self.bubbleImage.highlighted = YES;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willHideEditMenu:) name:UIMenuControllerWillHideMenuNotification object:nil];
+        
+        UIMenuController *theMenu = [UIMenuController sharedMenuController];
+        CGRect selectionRect = self.customView.frame;
+        [theMenu setTargetRect:selectionRect inView:self];
+        [theMenu setMenuVisible:YES animated:YES];
+    }
 }
 
 @end
