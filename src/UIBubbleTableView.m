@@ -266,8 +266,7 @@
     {
         static NSString *cellId = @"tblBubbleNotificationCell";
         UIBubbleNotificationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
-        
+
         if (cell == nil) cell = [[UIBubbleNotificationTableViewCell alloc] init];
         
         cell.data = data;
@@ -280,6 +279,17 @@
         return cell;
     }
     
+    // Read receipt
+    if (data.type == BubbleTypeReadReceiptMine || data.type == BubbleTypeReadReceiptMine)
+    {
+        static NSString *cellId = @"tblBubbleReceiptCell";
+        UIBubbleReceiptTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        
+        // setup
+        cell.data = data;
+        
+        return cell;
+    }
     
     // Standard bubble
     static NSString *cellId = @"tblBubbleCell";
