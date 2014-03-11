@@ -281,7 +281,7 @@
     }
     
     // Read receipt
-    if (data.type == BubbleTypeReadReceiptMine || data.type == BubbleTypeReadReceiptSomeone)
+    if (data.type == BubbleTypeReceiptMine || data.type == BubbleTypeReceiptSomeone)
     {
         static NSString *cellId = @"tblBubbleReceiptCell";
         UIBubbleReceiptTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];

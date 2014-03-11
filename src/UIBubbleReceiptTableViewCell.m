@@ -28,7 +28,7 @@
 {
     CGFloat width = self.data.view.frame.size.width;
     CGFloat height = self.data.view.frame.size.height;
-    CGFloat x = (self.data.type == BubbleTypeReadReceiptMine) ? 0 : self.frame.size.width - width - self.data.insets.left - self.data.insets.right;
+    CGFloat x = (self.data.type == BubbleTypeReceiptMine) ? 0 : self.frame.size.width - width - self.data.insets.left - self.data.insets.right;
     CGFloat y = 0;
     
     [self.customView removeFromSuperview];
