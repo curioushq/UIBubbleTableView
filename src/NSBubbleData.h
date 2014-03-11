@@ -15,8 +15,8 @@ typedef enum _NSBubbleType
     BubbleTypeMine = 0,
     BubbleTypeSomeoneElse = 1,
     BubbleTypeNotification = 2,
-    BubbleTypeReadReceiptMine,
-    BubbleTypeReadReceiptSomeone
+    BubbleTypeReceiptMine,
+    BubbleTypeReceiptSomeone
 } NSBubbleType;
 
 @interface NSBubbleData : NSObject

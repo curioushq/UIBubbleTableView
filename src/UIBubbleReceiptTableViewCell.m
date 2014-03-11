@@ -1,18 +1,14 @@
 //
 //  UIBubbleReceiptTableViewCell.m
-//  Pods
+//  UIBubbleTableView
 //
-//  Created by Kirill on 3/7/14.
+//  Created by Kirill Kormiltsev on 3/7/14.
 //
 //
 
 #import "UIBubbleReceiptTableViewCell.h"
 
 @interface UIBubbleReceiptTableViewCell ()
-
-//@property (nonatomic, strong) NSString *typeString;
-//@property (nonatomic, strong) NSString *typeRelativeString;
-//@property (nonatomic, strong) UILabel *textLabel;
 
 @property (nonatomic, strong) UIView *customView;
 
@@ -21,74 +17,6 @@
 @end
 
 @implementation UIBubbleReceiptTableViewCell
-
-//- (void)setType:(BubbleReceiptType)type
-//{
-//    switch (type) {
-//        case BubbleReceiptTypeDelivered:
-//            self.typeString = NSLocalizedString(@"Delivered", nil);
-//            self.typeRelativeString = NSLocalizedString(@"Delivered to %@", nil);
-//            break;
-//        case BubbleReceiptTypeSeen:
-//            self.typeString = NSLocalizedString(@"/u2713 Seen", nil);
-//            self.typeRelativeString = NSLocalizedString(@"/u2713 Seen by %@", nil);
-//            break;
-//        default:
-//            self.typeString = @"";
-//            self.typeRelativeString = @"";
-//            break;
-//    }
-//    
-//    _type = type;
-//    [self updateData];
-//}
-//
-//- (void)setReceiptDetails:(NSString *)receiptDetails
-//{
-//    if (_receiptDetails != receiptDetails)
-//    {
-//        _receiptDetails = receiptDetails;
-//    }
-//    
-//    [self updateData];
-//}
-//
-//- (void)setMine:(BOOL)mine
-//{
-//    _mine = mine;
-//    
-//    [self updateData];
-//}
-//
-//- (void)updateData
-//{
-//    if (self.textLabel == nil)
-//    {
-//        self.textLabel = [[UILabel alloc] initWithFrame:self.bounds];
-//        self.textLabel.textAlignment = [self isMine] ? NSTextAlignmentLeft : NSTextAlignmentRight;
-//        
-//        // setup font style...
-//    }
-//    
-//    if (self.receiptDetails != nil && ![self.receiptDetails isEqualToString:@""])
-//    {
-//        self.textLabel.text = [NSString stringWithFormat:self.typeRelativeString, self.receiptDetails];
-//    }
-//    else
-//    {
-//        self.textLabel.text = self.typeString;
-//    }
-//    
-//    [self.textLabel sizeToFit];
-//    CGSize labelSize = self.textLabel.frame.size;
-//    // or
-////    CGSize labelSize = [self.textLabel.attributedText boundingRectWithSize:CGSizeMake(self.textLabel.frame.size.width, CGFLOAT_MAX)
-////                                                                   options:NSStringDrawingUsesLineFragmentOrigin
-////                                                                   context:nil].size;
-//    CGRect initialFrame = self.frame;
-//    initialFrame.size.height = labelSize.height;
-//    self.frame = initialFrame;
-//}
 
 - (void)setFrame:(CGRect)frame
 {

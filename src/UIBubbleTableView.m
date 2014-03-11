@@ -13,6 +13,7 @@
 #import "UIBubbleHeaderTableViewCell.h"
 #import "UIBubbleTypingTableViewCell.h"
 #import "UIBubbleNotificationTableViewCell.h"
+#import "UIBubbleReceiptTableViewCell.h"
 
 @interface UIBubbleTableView ()
 
@@ -280,13 +281,17 @@
     }
     
     // Read receipt
-    if (data.type == BubbleTypeReadReceiptMine || data.type == BubbleTypeReadReceiptMine)
+    if (data.type == BubbleTypeReadReceiptMine || data.type == BubbleTypeReadReceiptSomeone)
     {
         static NSString *cellId = @"tblBubbleReceiptCell";
         UIBubbleReceiptTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
+        if (cell == nil) cell = [[UIBubbleReceiptTableViewCell alloc] init];
+        
         // setup
         cell.data = data;
+        
+        cell.backgroundColor = [UIColor clearColor];
         
         return cell;
     }

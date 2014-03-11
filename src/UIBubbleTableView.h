@@ -12,7 +12,6 @@
 
 #import "UIBubbleTableViewDataSource.h"
 #import "UIBubbleTableViewCell.h"
-#import "UIBubbleReceiptTableViewCell.h"
 
 typedef enum _NSBubbleTypingType
 {
@@ -30,7 +29,6 @@ typedef enum _NSBubbleTypingType
 @property (nonatomic) BOOL showAvatars;
 @property NSInteger blankFooterSpace;
 
-@property (nonatomic) BubbleReceiptType receiptType;
 @property (nonatomic, strong) NSString *receiptDescription;
 
 @end
