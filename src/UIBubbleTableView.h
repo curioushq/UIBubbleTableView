@@ -29,4 +29,6 @@ typedef enum _NSBubbleTypingType
 @property (nonatomic) BOOL showAvatars;
 @property NSInteger blankFooterSpace;
 
+@property (nonatomic, strong) NSString *receiptDescription;
+
 @end

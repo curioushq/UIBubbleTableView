@@ -69,13 +69,20 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
     
     NIAttributedLabel *label = nil;
     
-    if (type == BubbleTypeNotification)
+    if (type == BubbleTypeNotification || type == BubbleTypeReceiptMine || type == BubbleTypeReceiptSomeone)
     {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.alignment = NSTextAlignmentCenter;
+        if (type == BubbleTypeNotification)
+        {
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+        }
+        else
+        {
+            paragraphStyle.alignment = (type == BubbleTypeReceiptMine) ? NSTextAlignmentRight : NSTextAlignmentLeft;
+        }
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [UIFont boldSystemFontOfSize:12], NSFontAttributeName,
-                                    [UIColor blackColor], NSForegroundColorAttributeName,
+                                    (type == BubbleTypeNotification) ? [UIColor blackColor] : [UIColor grayColor], NSForegroundColorAttributeName,
                                     paragraphStyle, NSParagraphStyleAttributeName, nil];
         [attributedText addAttributes:attributes range:NSMakeRange(0, attributedText.length)];
         
@@ -90,9 +97,7 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
                                                                       NULL, targetSize, NULL);
         CFRelease(framesetter);
 
-        label = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 300.f, fitSize.height)];
-        
-        label.textAlignment = NSTextAlignmentCenter;
+        label = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(0.f, 0, 300.f, fitSize.height)];
         label.shadowOffset = CGSizeMake(0, 1);
         label.shadowColor = [UIColor whiteColor];
     }
