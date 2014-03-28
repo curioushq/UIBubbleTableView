@@ -28,6 +28,8 @@ typedef enum _NSBubbleType
 @property (nonatomic, strong) UIImage *avatar;
 @property (nonatomic, strong) NSString *avatarLabelStr;
 
+- (id)initWithAttributedText:(NSAttributedString *)text date:(NSDate *)date type:(NSBubbleType)type;
++ (id)dataWithAttributedText:(NSAttributedString *)text date:(NSDate *)date type:(NSBubbleType)type;
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type;
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type;
 - (id)initWithImage:(UIImage *)image date:(NSDate *)date type:(NSBubbleType)type;
