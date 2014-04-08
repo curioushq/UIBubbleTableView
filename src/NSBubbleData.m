@@ -49,6 +49,7 @@
 const UIEdgeInsets textInsetsMine = {4, 12, 8, 20};
 const UIEdgeInsets textInsetsSomeone = {4, 18, 8, 12};
 const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
+const UIEdgeInsets textInsetsReadReceipt = {10, 0, 10, 0};
 
 + (id)dataWithAttributedText:(NSAttributedString *)text date:(NSDate *)date type:(NSBubbleType)type
 {
@@ -133,6 +134,10 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
     else if (type == BubbleTypeNotification)
     {
         insets = textInsetsNotification;
+    }
+    else if (type == BubbleTypeReceiptMine || type == BubbleTypeReceiptSomeone)
+    {
+        insets = textInsetsReadReceipt;
     }
     
     return [self initWithView:label date:date type:type insets:insets];
@@ -230,6 +235,10 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
     else if (type == BubbleTypeNotification)
     {
         insets = textInsetsNotification;
+    }
+    else if (type == BubbleTypeReceiptMine || type == BubbleTypeReceiptSomeone)
+    {
+        insets = textInsetsReadReceipt;
     }
     
     return [self initWithView:label date:date type:type insets:insets];

@@ -191,7 +191,7 @@
     {
         return [UIBubbleTableViewCell heightForData:data showAvatar:self.showAvatars && !self.hideMyAvatar];
     }
-    else if (data.type == BubbleTypeNotification)
+    else if (data.type == BubbleTypeNotification || data.type == BubbleTypeReceiptMine || data.type == BubbleTypeReceiptSomeone)
     {
         return [UIBubbleTableViewCell heightForData:data showAvatar:NO];
     }

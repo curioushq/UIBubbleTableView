@@ -12,10 +12,10 @@
 #import "UIBubbleTableViewCell.h"
 #import "NSBubbleData.h"
 
-static CGFloat const kBubbleAvatarLabelHeight = 15.f;
-static CGFloat const kBubbleAvatarImageSize = 50.f;
-static CGFloat const kBubbleBorderPadding = 10.f;
-static CGFloat const kBubbleElementPadding = 5.f;
+static CGFloat const BubbleAvatarLabelHeight = 15.f;
+static CGFloat const BubbleAvatarImageSize = 50.f;
+static CGFloat const BubbleBorderPadding = 10.f;
+static CGFloat const BubbleElementPadding = 5.f;
 
 @interface UIBubbleTableViewCell ()
 
@@ -72,15 +72,20 @@ static CGFloat const kBubbleElementPadding = 5.f;
 + (CGFloat)heightForData:(NSBubbleData *)data showAvatar:(BOOL)showAvatar
 {
     float avatarLabel = 0;
+    float elementPadding = 0;
     if (data.avatarLabelStr != nil && data.type == BubbleTypeSomeoneElse)
     {
-        avatarLabel = kBubbleAvatarLabelHeight;
+        avatarLabel = BubbleAvatarLabelHeight;
+    }
+    if (data.type == BubbleTypeMine || data.type == BubbleTypeSomeoneElse)
+    {
+        elementPadding = BubbleElementPadding;
     }
     
     float numberA = data.insets.top + data.view.frame.size.height + data.insets.bottom;
-    float numberB = showAvatar ? kBubbleAvatarImageSize : 0;
+    float numberB = showAvatar ? BubbleAvatarImageSize : 0;
 
-    return ( MAX (numberA, numberB) + avatarLabel + kBubbleElementPadding);
+    return ( MAX (numberA, numberB) + avatarLabel + elementPadding);
 }
 
 - (void)setDataInternal:(NSBubbleData *)value
@@ -108,8 +113,8 @@ static CGFloat const kBubbleElementPadding = 5.f;
     CGFloat width = self.data.view.frame.size.width;
     CGFloat height = self.data.view.frame.size.height;
 
-    CGFloat left = (type == BubbleTypeSomeoneElse) ? kBubbleBorderPadding : self.frame.size.width - width - self.data.insets.left - self.data.insets.right - kBubbleBorderPadding;
-    CGFloat bottom = [[self class] heightForData:self.data showAvatar:self.showAvatar] - kBubbleElementPadding;
+    CGFloat left = (type == BubbleTypeSomeoneElse) ? BubbleBorderPadding : self.frame.size.width - width - self.data.insets.left - self.data.insets.right - BubbleBorderPadding;
+    CGFloat bottom = [[self class] heightForData:self.data showAvatar:self.showAvatar] - BubbleElementPadding;
     
     if (self.data.avatarLabelStr != nil && type == BubbleTypeSomeoneElse)
     {
@@ -130,8 +135,8 @@ static CGFloat const kBubbleElementPadding = 5.f;
         self.avatarLabel.font = font;
         self.avatarLabel.textColor = [UIColor darkTextColor];
 
-        bottom -= kBubbleAvatarLabelHeight;
-        self.avatarLabel.frame = CGRectMake(left, bottom, 200, kBubbleAvatarLabelHeight);
+        bottom -= BubbleAvatarLabelHeight;
+        self.avatarLabel.frame = CGRectMake(left, bottom, 200, BubbleAvatarLabelHeight);
         [self.contentView addSubview:self.avatarLabel];
     }
     
@@ -147,14 +152,14 @@ static CGFloat const kBubbleElementPadding = 5.f;
         self.avatarImage.layer.cornerRadius = 4.0;
         self.avatarImage.layer.masksToBounds = YES;
 
-        CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? left : self.frame.size.width - 50 - kBubbleBorderPadding;
-        CGFloat avatarY = bottom - kBubbleAvatarImageSize;
+        CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? left : self.frame.size.width - 50 - BubbleBorderPadding;
+        CGFloat avatarY = bottom - BubbleAvatarImageSize;
         
-        self.avatarImage.frame = CGRectMake(avatarX, avatarY, kBubbleAvatarImageSize, 50);
+        self.avatarImage.frame = CGRectMake(avatarX, avatarY, BubbleAvatarImageSize, 50);
         [self addSubview:self.avatarImage];
         
-        if (type == BubbleTypeSomeoneElse) left += 50 + kBubbleElementPadding;
-        if (type == BubbleTypeMine) left -= 50 - kBubbleElementPadding;
+        if (type == BubbleTypeSomeoneElse) left += 50 + BubbleElementPadding;
+        if (type == BubbleTypeMine) left -= 50 - BubbleElementPadding;
     }
     
     CGFloat delta = self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height;
