@@ -13,5 +13,7 @@
 + (CGFloat)height;
 
 @property (nonatomic, strong) NSDate *date;
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic) BOOL drawLines;
 
 @end

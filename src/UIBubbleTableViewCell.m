@@ -12,6 +12,11 @@
 #import "UIBubbleTableViewCell.h"
 #import "NSBubbleData.h"
 
+static CGFloat const BubbleAvatarLabelHeight = 15.f;
+static CGFloat const BubbleAvatarImageSize = 50.f;
+static CGFloat const BubbleBorderPadding = 10.f;
+static CGFloat const BubbleElementPadding = 5.f;
+
 @interface UIBubbleTableViewCell ()
 
 @property (nonatomic, retain) UIView *customView;
@@ -34,6 +39,17 @@
 @synthesize avatarLabel = _avatarLabel;
 @synthesize longPressTimer = _longPressTimer;
 
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self)
+    {
+        self.avatarFont = [UIFont systemFontOfSize:11.f];
+    }
+    
+    return self;
+}
+
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
@@ -52,6 +68,25 @@
     [super dealloc];
 }
 #endif
+
++ (CGFloat)heightForData:(NSBubbleData *)data showAvatar:(BOOL)showAvatar
+{
+    float avatarLabel = 0;
+    float elementPadding = 0;
+    if (data.avatarLabelStr != nil && data.type == BubbleTypeSomeoneElse)
+    {
+        avatarLabel = BubbleAvatarLabelHeight;
+    }
+    if (data.type == BubbleTypeMine || data.type == BubbleTypeSomeoneElse)
+    {
+        elementPadding = BubbleElementPadding;
+    }
+    
+    float numberA = data.insets.top + data.view.frame.size.height + data.insets.bottom;
+    float numberB = showAvatar ? BubbleAvatarImageSize : 0;
+
+    return ( MAX (numberA, numberB) + avatarLabel + elementPadding);
+}
 
 - (void)setDataInternal:(NSBubbleData *)value
 {
@@ -77,9 +112,33 @@
     
     CGFloat width = self.data.view.frame.size.width;
     CGFloat height = self.data.view.frame.size.height;
+
+    CGFloat left = (type == BubbleTypeSomeoneElse) ? BubbleBorderPadding : self.frame.size.width - width - self.data.insets.left - self.data.insets.right - BubbleBorderPadding;
+    CGFloat bottom = [[self class] heightForData:self.data showAvatar:self.showAvatar] - BubbleElementPadding;
     
-    CGFloat x = (type == BubbleTypeSomeoneElse) ? 0 : self.frame.size.width - width - self.data.insets.left - self.data.insets.right;
-    CGFloat y = 0;
+    if (self.data.avatarLabelStr != nil && type == BubbleTypeSomeoneElse)
+    {
+        [self.avatarLabel removeFromSuperview];
+#if !__has_feature(objc_arc)
+        self.avatarLabel = [[[UILabel alloc] init] autorelease];
+#else
+        self.avatarLabel = [[UILabel alloc] init];
+#endif
+        UIFont *font = self.avatarFont;
+        if (font == nil)
+        {
+            font = [UIFont systemFontOfSize:11.f];
+        }
+        
+        self.avatarLabel.text = self.data.avatarLabelStr;
+        self.avatarLabel.backgroundColor = [UIColor clearColor];
+        self.avatarLabel.font = font;
+        self.avatarLabel.textColor = [UIColor darkTextColor];
+
+        bottom -= BubbleAvatarLabelHeight;
+        self.avatarLabel.frame = CGRectMake(left, bottom, 200, BubbleAvatarLabelHeight);
+        [self.contentView addSubview:self.avatarLabel];
+    }
     
     // Adjusting the x coordinate for avatar
     if (self.showAvatar)
@@ -90,64 +149,39 @@
 #else
         self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])];
 #endif
-        self.avatarImage.layer.cornerRadius = 9.0;
+        self.avatarImage.layer.cornerRadius = 4.0;
         self.avatarImage.layer.masksToBounds = YES;
-        self.avatarImage.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:0.2].CGColor;
-        self.avatarImage.layer.borderWidth = 1.0;
+
+        CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? left : self.frame.size.width - 50 - BubbleBorderPadding;
+        CGFloat avatarY = bottom - BubbleAvatarImageSize;
         
-        CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? 2 : self.frame.size.width - 52;
-        CGFloat avatarY = self.frame.size.height - 50;
-        
-        self.avatarImage.frame = CGRectMake(avatarX, avatarY, 50, 50);
+        self.avatarImage.frame = CGRectMake(avatarX, avatarY, BubbleAvatarImageSize, 50);
         [self addSubview:self.avatarImage];
         
-        CGFloat delta = self.frame.size.height - (self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height);
-        if (delta > 0) y = delta;
-        
-        if (type == BubbleTypeSomeoneElse) x += 54;
-        if (type == BubbleTypeMine) x -= 54;
+        if (type == BubbleTypeSomeoneElse) left += 50 + BubbleElementPadding;
+        if (type == BubbleTypeMine) left -= 50 - BubbleElementPadding;
     }
+    
+    CGFloat delta = self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height;
+    if (delta > 0) bottom -= delta;
     
     [self.customView removeFromSuperview];
     self.customView = self.data.view;
-    self.customView.frame = CGRectMake(x + self.data.insets.left, y + self.data.insets.top, width, height);
+    self.customView.frame = CGRectMake(left + self.data.insets.left, bottom + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
     
     if (type == BubbleTypeSomeoneElse)
     {
-        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
-        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleSomeoneSelected.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleSomeoneSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
         
     }
     else {
-        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
-        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleMineSelected.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
+        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleMineSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
     }
     
-    self.bubbleImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
-    
-    
-    if (self.data.avatarLabelStr != nil && type == BubbleTypeSomeoneElse)
-    {
-        [self.avatarLabel removeFromSuperview];
-#if !__has_feature(objc_arc)
-        self.avatarLabel = [[[UILabel alloc] init] autorelease];
-#else
-        self.avatarLabel = [[UILabel alloc] init];
-#endif
-        
-        self.avatarLabel.text = self.data.avatarLabelStr;
-        self.avatarLabel.backgroundColor = [UIColor clearColor];
-        self.avatarLabel.font = [UIFont systemFontOfSize:12];
-        self.avatarLabel.textColor = [UIColor grayColor];
-        
-        CGFloat avatarLabelX = self.bubbleImage.frame.origin.x + 10;
-        CGFloat avatarLabelY = self.bubbleImage.frame.origin.y - 24;
-        
-        self.avatarLabel.frame = CGRectMake(avatarLabelX, avatarLabelY, 200, 30);
-        [self.contentView addSubview:self.avatarLabel];
-    }
-    
+    self.bubbleImage.frame = CGRectMake(left, bottom, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
 }
 
 #pragma mark - UIResponder subclassing

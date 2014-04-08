@@ -27,7 +27,13 @@ typedef enum _NSBubbleTypingType
 @property (nonatomic) NSTimeInterval snapInterval;
 @property (nonatomic) NSBubbleTypingType typingBubble;
 @property (nonatomic) BOOL showAvatars;
+@property (nonatomic) BOOL hideMyAvatar;
 @property NSInteger blankFooterSpace;
+
+@property (nonatomic) BOOL divideWithLines;
+
+@property (nonatomic, strong) UIFont *headerFont;
+@property (nonatomic, strong) UIFont *avatarFont;
 
 @property (nonatomic, strong) NSString *receiptDescription;
 

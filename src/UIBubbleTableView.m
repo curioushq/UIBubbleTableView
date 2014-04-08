@@ -176,7 +176,7 @@
     // Now typing
 	if (indexPath.section >= [self.bubbleSection count])
     {
-        return MAX([UIBubbleTypingTableViewCell height], self.showAvatars ? 52 : 0);
+        return MAX([UIBubbleTypingTableViewCell height], self.showAvatars ? 55 : 0);
     }
     
     // Header
@@ -187,19 +187,16 @@
     
     NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
     
-    int minHeight = 52;         // for avatars
-    if (data.type == BubbleTypeNotification)
+    if (data.type == BubbleTypeMine)
     {
-        minHeight = 0;
+        return [UIBubbleTableViewCell heightForData:data showAvatar:self.showAvatars && !self.hideMyAvatar];
+    }
+    else if (data.type == BubbleTypeNotification || data.type == BubbleTypeReceiptMine || data.type == BubbleTypeReceiptSomeone)
+    {
+        return [UIBubbleTableViewCell heightForData:data showAvatar:NO];
     }
     
-    int adjustHeight = 0;
-    if (data.avatarLabelStr != nil)
-    {
-        adjustHeight = 20;
-    }
-    
-    return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom + adjustHeight, self.showAvatars ? minHeight : 0);
+    return [UIBubbleTableViewCell heightForData:data showAvatar:self.showAvatars];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
@@ -254,6 +251,8 @@
         
         if (cell == nil) cell = [[UIBubbleHeaderTableViewCell alloc] init];
         
+        cell.drawLines = self.divideWithLines;
+        cell.font = self.headerFont;
         cell.date = data.date;
         
         cell.backgroundColor = [UIColor clearColor];
@@ -302,8 +301,15 @@
     
     if (cell == nil) cell = [[UIBubbleTableViewCell alloc] init];
     
+    BOOL showAvatars = self.showAvatars;
+    if (data.type == BubbleTypeMine)
+    {
+        showAvatars = showAvatars && !self.hideMyAvatar;
+    }
+    
     cell.data = data;
-    cell.showAvatar = self.showAvatars;
+    cell.showAvatar = showAvatars;
+    cell.avatarFont = self.avatarFont;
     
     cell.backgroundColor = [UIColor clearColor];
     

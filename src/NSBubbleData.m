@@ -46,9 +46,102 @@
 
 #pragma mark - Text bubble
 
-const UIEdgeInsets textInsetsMine = {5, 10, 11, 17};
-const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
+const UIEdgeInsets textInsetsMine = {4, 12, 8, 20};
+const UIEdgeInsets textInsetsSomeone = {4, 18, 8, 12};
 const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
+const UIEdgeInsets textInsetsReadReceipt = {10, 0, 10, 0};
+
++ (id)dataWithAttributedText:(NSAttributedString *)text date:(NSDate *)date type:(NSBubbleType)type
+{
+#if !__has_feature(objc_arc)
+    return [[[NSBubbleData alloc] initWithAttributedText:text date:date type:type] autorelease];
+#else
+    return [[NSBubbleData alloc] initWithAttributedText:text date:date type:type];
+#endif    
+}
+
+- (id)initWithAttributedText:(NSAttributedString *)text date:(NSDate *)date type:(NSBubbleType)type
+{
+    if (text == nil)
+    {
+        text = [[NSAttributedString alloc] initWithString:@""];
+    }
+    
+    NSMutableAttributedString *attrString = [text mutableCopy];
+    NIAttributedLabel *label = nil;
+    
+    if (type == BubbleTypeNotification || type == BubbleTypeReceiptMine || type == BubbleTypeReceiptSomeone)
+    {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        if (type == BubbleTypeNotification)
+        {
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+        }
+        else
+        {
+            paragraphStyle.alignment = (type == BubbleTypeReceiptMine) ? NSTextAlignmentRight : NSTextAlignmentLeft;
+        }
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    paragraphStyle, NSParagraphStyleAttributeName, nil];
+        [attrString addAttributes:attributes range:NSMakeRange(0, text.length)];
+        
+#if !__has_feature(objc_arc)
+        [paragraphStyle release];
+#endif
+        
+        // static width, variable height
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attrString);
+        CGSize targetSize = CGSizeMake(300.f, CGFLOAT_MAX);
+        CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [text length]),
+                                                                      NULL, targetSize, NULL);
+        CFRelease(framesetter);
+        
+        label = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(0.f, 0, 300.f, fitSize.height)];
+    }
+    else
+    {
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attrString);
+        CGSize targetSize = CGSizeMake(220.f, CGFLOAT_MAX);
+        CGSize fitSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [text length]),
+                                                                      NULL, targetSize, NULL);
+        CFRelease(framesetter);
+        
+        label = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, fitSize.width, fitSize.height)];
+        
+        label.autoDetectLinks = YES;
+        label.linksHaveUnderlines = YES;
+        NSMutableDictionary *attributes = [[text attributesAtIndex:0 effectiveRange:NULL] mutableCopy];
+        [attributes setObject:[UIColor blueColor] forKey:NSForegroundColorAttributeName];
+        label.attributesForLinks = attributes;
+        label.delegate = self;
+    }
+    
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.attributedText = attrString;
+    label.backgroundColor = [UIColor clearColor];
+    
+#if !__has_feature(objc_arc)
+    [attrString release];
+    [label autorelease];
+#endif
+    
+    UIEdgeInsets insets = textInsetsMine;
+    if (type == BubbleTypeSomeoneElse)
+    {
+        insets = textInsetsSomeone;
+    }
+    else if (type == BubbleTypeNotification)
+    {
+        insets = textInsetsNotification;
+    }
+    else if (type == BubbleTypeReceiptMine || type == BubbleTypeReceiptSomeone)
+    {
+        insets = textInsetsReadReceipt;
+    }
+    
+    return [self initWithView:label date:date type:type insets:insets];
+}
 
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type
 {
@@ -56,7 +149,7 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
     return [[[NSBubbleData alloc] initWithText:text date:date type:type] autorelease];
 #else
     return [[NSBubbleData alloc] initWithText:text date:date type:type];
-#endif    
+#endif
 }
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type
@@ -142,6 +235,10 @@ const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
     else if (type == BubbleTypeNotification)
     {
         insets = textInsetsNotification;
+    }
+    else if (type == BubbleTypeReceiptMine || type == BubbleTypeReceiptSomeone)
+    {
+        insets = textInsetsReadReceipt;
     }
     
     return [self initWithView:label date:date type:type insets:insets];
