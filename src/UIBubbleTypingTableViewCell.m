@@ -42,15 +42,26 @@
     {
         bubbleImage = [UIImage imageNamed:@"typingMine.png"]; 
         x = self.frame.size.width - bubbleImage.size.width;
+        self.typingImageView.frame = CGRectMake(x, 4, 73, 31);
+    }
+    else if (value == NSBubbleTypingLoading)
+    {
+        x = 0;
+        UIActivityIndicatorView *spinner =  [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        spinner.frame = CGRectMake(150, 5, 20, 20);
+        [spinner startAnimating];
+        [self.typingImageView addSubview:spinner];
+        self.typingImageView.frame = CGRectMake(x, 4, 320, 31);
     }
     else
     {
-        bubbleImage = [UIImage imageNamed:@"typingSomeone.png"]; 
+        bubbleImage = [UIImage imageNamed:@"typingSomeone.png"];
         x = 0;
+        self.typingImageView.frame = CGRectMake(x, 4, 73, 31);
     }
     
     self.typingImageView.image = bubbleImage;
-    self.typingImageView.frame = CGRectMake(x, 4, 73, 31);
+
 }
 
 @end
