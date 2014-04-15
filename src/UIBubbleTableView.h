@@ -17,7 +17,8 @@ typedef enum _NSBubbleTypingType
 {
     NSBubbleTypingTypeNobody = 0,
     NSBubbleTypingTypeMe = 1,
-    NSBubbleTypingTypeSomebody = 2
+    NSBubbleTypingTypeSomebody = 2,
+    NSBubbleTypingLoading = 3
 } NSBubbleTypingType;
 
 @interface UIBubbleTableView : UITableView <UITableViewDelegate, UITableViewDataSource>
