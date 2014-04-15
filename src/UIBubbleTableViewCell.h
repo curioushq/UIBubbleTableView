@@ -15,7 +15,7 @@
 
 @property (nonatomic, strong) NSBubbleData *data;
 @property (nonatomic) BOOL showAvatar;
-@property (nonatomic, strong) UIFont *avatarFont;
+@property (nonatomic, strong) NSDictionary *avatarTextAttributes;
 
 + (CGFloat)heightForData:(NSBubbleData *)data showAvatar:(BOOL)showAvatar;
 

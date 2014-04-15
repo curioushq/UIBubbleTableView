@@ -13,7 +13,7 @@
 #import "NSBubbleData.h"
 
 static CGFloat const BubbleAvatarLabelHeight = 15.f;
-static CGFloat const BubbleAvatarImageSize = 50.f;
+static CGFloat const BubbleAvatarImageSize = 45.f;
 static CGFloat const BubbleBorderPadding = 10.f;
 static CGFloat const BubbleElementPadding = 5.f;
 
@@ -44,7 +44,9 @@ static CGFloat const BubbleElementPadding = 5.f;
     self = [super initWithFrame:frame];
     if (self)
     {
-        self.avatarFont = [UIFont systemFontOfSize:11.f];
+        self.avatarTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     [UIFont systemFontOfSize:11.f], NSFontAttributeName,
+                                     [UIColor darkTextColor], NSForegroundColorAttributeName,nil];
     }
     
     return self;
@@ -65,6 +67,7 @@ static CGFloat const BubbleElementPadding = 5.f;
     self.avatarImage = nil;
     self.avatarLabel = nil;
     self.longPressTimer = nil;
+    self.avatarTextAttributes = nil;
     [super dealloc];
 }
 #endif
@@ -124,16 +127,8 @@ static CGFloat const BubbleElementPadding = 5.f;
 #else
         self.avatarLabel = [[UILabel alloc] init];
 #endif
-        UIFont *font = self.avatarFont;
-        if (font == nil)
-        {
-            font = [UIFont systemFontOfSize:11.f];
-        }
-        
-        self.avatarLabel.text = self.data.avatarLabelStr;
+        self.avatarLabel.attributedText = [[NSAttributedString alloc] initWithString:self.data.avatarLabelStr attributes:self.avatarTextAttributes];
         self.avatarLabel.backgroundColor = [UIColor clearColor];
-        self.avatarLabel.font = font;
-        self.avatarLabel.textColor = [UIColor darkTextColor];
 
         bottom -= BubbleAvatarLabelHeight;
         self.avatarLabel.frame = CGRectMake(left, bottom, 200, BubbleAvatarLabelHeight);
@@ -152,14 +147,14 @@ static CGFloat const BubbleElementPadding = 5.f;
         self.avatarImage.layer.cornerRadius = 4.0;
         self.avatarImage.layer.masksToBounds = YES;
 
-        CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? left : self.frame.size.width - 50 - BubbleBorderPadding;
+        CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? left : self.frame.size.width - BubbleAvatarImageSize - BubbleBorderPadding;
         CGFloat avatarY = bottom - BubbleAvatarImageSize;
         
-        self.avatarImage.frame = CGRectMake(avatarX, avatarY, BubbleAvatarImageSize, 50);
+        self.avatarImage.frame = CGRectMake(avatarX, avatarY, BubbleAvatarImageSize, BubbleAvatarImageSize);
         [self addSubview:self.avatarImage];
         
-        if (type == BubbleTypeSomeoneElse) left += 50 + BubbleElementPadding;
-        if (type == BubbleTypeMine) left -= 50 - BubbleElementPadding;
+        if (type == BubbleTypeSomeoneElse) left += BubbleAvatarImageSize + BubbleElementPadding;
+        if (type == BubbleTypeMine) left -= BubbleAvatarImageSize + BubbleElementPadding;
     }
     
     CGFloat delta = self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height;
