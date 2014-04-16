@@ -49,7 +49,7 @@
 const UIEdgeInsets textInsetsMine = {4, 12, 8, 20};
 const UIEdgeInsets textInsetsSomeone = {4, 18, 8, 12};
 const UIEdgeInsets textInsetsNotification = {5, 0, 5, 0};
-const UIEdgeInsets textInsetsReadReceipt = {10, 0, 10, 0};
+const UIEdgeInsets textInsetsReadReceipt = {0, 10, 5, 10};
 
 + (id)dataWithAttributedText:(NSAttributedString *)text date:(NSDate *)date type:(NSBubbleType)type
 {
