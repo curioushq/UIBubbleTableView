@@ -13,7 +13,9 @@
 + (CGFloat)height;
 
 @property (nonatomic, strong) NSDate *date;
-@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) NSDictionary *textAttributes;
 @property (nonatomic) BOOL drawLines;
+
+@property (nonatomic, strong) UIColor *linesColor;
 
 @end

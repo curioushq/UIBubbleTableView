@@ -32,6 +32,7 @@ typedef enum _NSBubbleTypingType
 @property NSInteger blankFooterSpace;
 
 @property (nonatomic) BOOL divideWithLines;
+@property (nonatomic, copy) UIColor *headerLinesColor;
 
 @property (nonatomic, strong) UIFont *headerFont;
 @property (nonatomic, strong) UIFont *avatarFont;
@@ -41,7 +42,9 @@ typedef enum _NSBubbleTypingType
 @property (nonatomic, strong) NSString *imageBubbleOtherSelected;
 @property (nonatomic) UIEdgeInsets edgeInsetsMine;
 @property (nonatomic) UIEdgeInsets edgeInsetsOther;
+@property (nonatomic, retain) NSDictionary *headerTextAttributes;
+@property (nonatomic, retain) NSDictionary *avatarTextAttributes;
 
-@property (nonatomic, strong) NSString *receiptDescription;
+@property (nonatomic, retain) NSString *receiptDescription;
 
 @end

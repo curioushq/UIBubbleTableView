@@ -22,6 +22,7 @@
 @property (nonatomic, strong) NSString *imageBubbleOtherSelected;
 @property (nonatomic) UIEdgeInsets edgeInsetsMine;
 @property (nonatomic) UIEdgeInsets edgeInsetsOther;
+@property (nonatomic, strong) NSDictionary *avatarTextAttributes;
 
 + (CGFloat)heightForData:(NSBubbleData *)data showAvatar:(BOOL)showAvatar;
 

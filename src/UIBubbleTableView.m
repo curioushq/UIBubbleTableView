@@ -252,7 +252,8 @@
         if (cell == nil) cell = [[UIBubbleHeaderTableViewCell alloc] init];
         
         cell.drawLines = self.divideWithLines;
-        cell.font = self.headerFont;
+        cell.linesColor = self.headerLinesColor;
+        cell.textAttributes = self.headerTextAttributes;
         cell.date = data.date;
         
         cell.backgroundColor = [UIColor clearColor];
@@ -316,6 +317,7 @@
     cell.imageBubbleOtherSelected = self.imageBubbleOtherSelected;
     cell.edgeInsetsMine = self.edgeInsetsMine;
     cell.edgeInsetsOther = self.edgeInsetsOther;
+    cell.avatarTextAttributes = self.avatarTextAttributes;
     
     cell.backgroundColor = [UIColor clearColor];
     
