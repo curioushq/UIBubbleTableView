@@ -16,6 +16,12 @@
 @property (nonatomic, strong) NSBubbleData *data;
 @property (nonatomic) BOOL showAvatar;
 @property (nonatomic, strong) UIFont *avatarFont;
+@property (nonatomic, strong) NSString *imageBubbleMine;
+@property (nonatomic, strong) NSString *imageBubbleMineSelected;
+@property (nonatomic, strong) NSString *imageBubbleOther;
+@property (nonatomic, strong) NSString *imageBubbleOtherSelected;
+@property (nonatomic) UIEdgeInsets edgeInsetsMine;
+@property (nonatomic) UIEdgeInsets edgeInsetsOther;
 
 + (CGFloat)heightForData:(NSBubbleData *)data showAvatar:(BOOL)showAvatar;
 

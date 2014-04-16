@@ -35,6 +35,12 @@ typedef enum _NSBubbleTypingType
 
 @property (nonatomic, strong) UIFont *headerFont;
 @property (nonatomic, strong) UIFont *avatarFont;
+@property (nonatomic, strong) NSString *imageBubbleMine;
+@property (nonatomic, strong) NSString *imageBubbleMineSelected;
+@property (nonatomic, strong) NSString *imageBubbleOther;
+@property (nonatomic, strong) NSString *imageBubbleOtherSelected;
+@property (nonatomic) UIEdgeInsets edgeInsetsMine;
+@property (nonatomic) UIEdgeInsets edgeInsetsOther;
 
 @property (nonatomic, strong) NSString *receiptDescription;
 

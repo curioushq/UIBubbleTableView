@@ -310,6 +310,12 @@
     cell.data = data;
     cell.showAvatar = showAvatars;
     cell.avatarFont = self.avatarFont;
+    cell.imageBubbleMine = self.imageBubbleMine;
+    cell.imageBubbleMineSelected = self.imageBubbleMineSelected;
+    cell.imageBubbleOther = self.imageBubbleOther;
+    cell.imageBubbleOtherSelected = self.imageBubbleOtherSelected;
+    cell.edgeInsetsMine = self.edgeInsetsMine;
+    cell.edgeInsetsOther = self.edgeInsetsOther;
     
     cell.backgroundColor = [UIColor clearColor];
     

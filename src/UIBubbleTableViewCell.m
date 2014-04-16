@@ -172,13 +172,25 @@ static CGFloat const BubbleElementPadding = 5.f;
     
     if (type == BubbleTypeSomeoneElse)
     {
-        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
-        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleSomeoneSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
+        NSString *imageName = self.imageBubbleOther != nil ? self.imageBubbleOther : @"bubbleSomeone";
+        UIEdgeInsets insets = self.edgeInsetsOther;
+        if(insets.top == 0 && insets.left == 0 && insets.bottom == 0 && insets.right == 0) {
+            insets = UIEdgeInsetsMake(18, 24, 18, 18);
+        }
+        self.bubbleImage.image = [[UIImage imageNamed:imageName] resizableImageWithCapInsets:insets];
+        NSString *imageNameSel = self.imageBubbleOtherSelected != nil ? self.imageBubbleOtherSelected : @"bubbleSomeoneSelected";
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:imageNameSel] resizableImageWithCapInsets:insets];
         
     }
     else {
-        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
-        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleMineSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
+        NSString *imageName = self.imageBubbleMine != nil ? self.imageBubbleMine : @"bubbleMine";
+        UIEdgeInsets insets = self.edgeInsetsMine;
+        if(insets.top == 0 && insets.left == 0 && insets.bottom == 0 && insets.right == 0) {
+            insets = UIEdgeInsetsMake(18, 18, 18, 24);
+        }
+        self.bubbleImage.image = [[UIImage imageNamed:imageName] resizableImageWithCapInsets:insets];
+        NSString *imageNameSel = self.imageBubbleMineSelected != nil ? self.imageBubbleMineSelected : @"bubbleMineSelected";
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:imageNameSel] resizableImageWithCapInsets:insets];
     }
     
     self.bubbleImage.frame = CGRectMake(left, bottom, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
