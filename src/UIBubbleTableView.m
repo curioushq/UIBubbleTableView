@@ -232,7 +232,10 @@
         static NSString *cellId = @"tblBubbleTypingCell";
         UIBubbleTypingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
-        if (cell == nil) cell = [[UIBubbleTypingTableViewCell alloc] init];
+        if (cell == nil)
+        {
+            cell = [[UIBubbleTypingTableViewCell alloc] init];
+        }
         
         cell.type = self.typingBubble;
         cell.showAvatar = self.showAvatars;
@@ -247,9 +250,13 @@
     {
         static NSString *cellId = @"tblBubbleHeaderCell";
         UIBubbleHeaderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:0];
         
-        if (cell == nil) cell = [[UIBubbleHeaderTableViewCell alloc] init];
+        if (cell == nil)
+        {
+            cell = [[UIBubbleHeaderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
+        
+        NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:0];
         
         cell.drawLines = self.divideWithLines;
         cell.linesColor = self.headerLinesColor;
@@ -268,7 +275,10 @@
         static NSString *cellId = @"tblBubbleNotificationCell";
         UIBubbleNotificationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 
-        if (cell == nil) cell = [[UIBubbleNotificationTableViewCell alloc] init];
+        if (cell == nil)
+        {
+            cell = [[UIBubbleNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
         
         cell.data = data;
         
@@ -286,7 +296,10 @@
         static NSString *cellId = @"tblBubbleReceiptCell";
         UIBubbleReceiptTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
-        if (cell == nil) cell = [[UIBubbleReceiptTableViewCell alloc] init];
+        if (cell == nil)
+        {
+            cell = [[UIBubbleReceiptTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
         
         // setup
         cell.data = data;
@@ -300,7 +313,10 @@
     static NSString *cellId = @"tblBubbleCell";
     UIBubbleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     
-    if (cell == nil) cell = [[UIBubbleTableViewCell alloc] init];
+    if (cell == nil)
+    {
+        cell = [[UIBubbleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+    }
     
     BOOL showAvatars = self.showAvatars;
     if (data.type == BubbleTypeMine)

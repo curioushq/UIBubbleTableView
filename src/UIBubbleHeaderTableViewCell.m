@@ -49,9 +49,9 @@
     [dateFormatter release];
 #endif
     
-    if (self.label)
+    if (self.label && self.textAttributes)
     {
-        self.label.text = text;
+        self.label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:self.textAttributes];
         return;
     }
     
@@ -63,6 +63,7 @@
                           [UIColor blackColor], NSForegroundColorAttributeName,
                           nil];
     }
+    
     if (![textAttributes objectForKey:NSParagraphStyleAttributeName])
     {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -72,6 +73,8 @@
         [paragraphStyle release];
 #endif
     }
+    
+    self.textAttributes = textAttributes;
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [UIBubbleHeaderTableViewCell height])];
