@@ -10,10 +10,6 @@
 
 @interface UIBubbleNotificationTableViewCell : UITableViewCell
 
-
-- (void)setDataInternal:(NSBubbleData *)value;
-
-
 @property (nonatomic, strong) NSBubbleData *data;
 @property (nonatomic) BOOL showAvatar;
 
