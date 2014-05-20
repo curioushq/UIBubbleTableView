@@ -27,6 +27,7 @@ static CGFloat const BubbleElementPadding = 5.f;
 
 - (void) setupInternalData;
 
+
 @end
 
 @implementation UIBubbleTableViewCell
@@ -55,7 +56,7 @@ static CGFloat const BubbleElementPadding = 5.f;
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-	[self setupInternalData];
+    [self setupInternalData];
 }
 
 #if !__has_feature(objc_arc)
@@ -96,7 +97,6 @@ static CGFloat const BubbleElementPadding = 5.f;
 	self.data = value;
 	[self setupInternalData];
 }
-
 - (void) setupInternalData
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -121,29 +121,42 @@ static CGFloat const BubbleElementPadding = 5.f;
     
     if (self.data.avatarLabelStr != nil && type == BubbleTypeSomeoneElse)
     {
-        [self.avatarLabel removeFromSuperview];
+        if(self.avatarLabel == nil)
+        {
 #if !__has_feature(objc_arc)
-        self.avatarLabel = [[[UILabel alloc] init] autorelease];
+            self.avatarLabel = [[[UILabel alloc] init] autorelease];
 #else
-        self.avatarLabel = [[UILabel alloc] init];
+            self.avatarLabel = [[UILabel alloc] init];
 #endif
+            [self.contentView addSubview:self.avatarLabel];
+        }
+        
         self.avatarLabel.attributedText = [[NSAttributedString alloc] initWithString:self.data.avatarLabelStr attributes:self.avatarTextAttributes];
         self.avatarLabel.backgroundColor = [UIColor clearColor];
 
         bottom -= BubbleAvatarLabelHeight;
         self.avatarLabel.frame = CGRectMake(left, bottom, 200, BubbleAvatarLabelHeight);
-        [self.contentView addSubview:self.avatarLabel];
+        
     }
     
     // Adjusting the x coordinate for avatar
     if (self.showAvatar)
     {
-        [self.avatarImage removeFromSuperview];
-#if !__has_feature(objc_arc)
-        self.avatarImage = [[[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])] autorelease];
-#else
-        self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])];
-#endif
+        if (self.avatarImage == nil)
+        {
+    #if !__has_feature(objc_arc)
+            self.avatarImage = [[[UIImageView alloc] init] autorelease];
+    #else
+            self.avatarImage = [[UIImageView alloc] init];
+    #endif
+            [self addSubview:self.avatarImage];
+        }
+        
+        self.avatarImage.hidden = NO;
+        self.avatarLabel.hidden = NO;
+        
+        self.avatarImage.image = self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"];
+        
         self.avatarImage.layer.cornerRadius = 4.0;
         self.avatarImage.layer.masksToBounds = YES;
 
@@ -151,20 +164,28 @@ static CGFloat const BubbleElementPadding = 5.f;
         CGFloat avatarY = bottom - BubbleAvatarImageSize;
         
         self.avatarImage.frame = CGRectMake(avatarX, avatarY, BubbleAvatarImageSize, BubbleAvatarImageSize);
-        [self addSubview:self.avatarImage];
+        
         
         if (type == BubbleTypeSomeoneElse) left += BubbleAvatarImageSize + BubbleElementPadding;
         if (type == BubbleTypeMine) left -= BubbleAvatarImageSize + BubbleElementPadding;
+    }
+    else
+    {
+        self.avatarImage.hidden = YES;
+        self.avatarLabel.hidden = YES;
     }
     
     CGFloat delta = self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height;
     if (delta > 0) bottom -= delta;
     
+
+
     [self.customView removeFromSuperview];
     self.customView = self.data.view;
     self.customView.frame = CGRectMake(left + self.data.insets.left, bottom + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
-    
+
+
     if (type == BubbleTypeSomeoneElse)
     {
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];

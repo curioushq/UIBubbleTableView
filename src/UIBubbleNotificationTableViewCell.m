@@ -90,10 +90,11 @@
     CGRect myFrame = self.frame;
     CGRect customFrame = self.customView.frame;
     
+
     [self.customView removeFromSuperview];
     self.customView = self.data.view;
     self.customView.frame = CGRectMake(x + self.data.insets.left, y + self.data.insets.top, width, height);
-    [self.contentView addSubview:self.customView];    
+    [self.contentView addSubview:self.customView];
 }
 
 @end
