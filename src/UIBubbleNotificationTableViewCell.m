@@ -53,8 +53,8 @@
     
     NSBubbleType type = self.data.type;
     
-    CGFloat width = self.data.bubbleDataView.frame.size.width;
-    CGFloat height = self.data.bubbleDataView.frame.size.height;
+    CGFloat width = self.data.view.frame.size.width;
+    CGFloat height = self.data.view.frame.size.height;
 
     // center it for now. If we have an avatar, we need to figure out how to put that on so it looks good.
     CGFloat x = (self.frame.size.width - width)/2;
@@ -92,7 +92,7 @@
     
 
     [self.customView removeFromSuperview];
-    self.customView = self.data.bubbleDataView;
+    self.customView = self.data.view;
     self.customView.frame = CGRectMake(x + self.data.insets.left, y + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
 }

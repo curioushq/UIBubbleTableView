@@ -28,13 +28,13 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    CGFloat width = self.data.bubbleDataView.frame.size.width;
-    CGFloat height = self.data.bubbleDataView.frame.size.height;
+    CGFloat width = self.data.view.frame.size.width;
+    CGFloat height = self.data.view.frame.size.height;
     CGFloat x = (self.data.type == BubbleTypeReceiptMine) ? self.frame.size.width - width - self.data.insets.left - self.data.insets.right : 0;
     CGFloat y = 0;
     
     [self.customView removeFromSuperview];
-    self.customView = self.data.bubbleDataView;
+    self.customView = self.data.view;
     self.customView.frame = CGRectMake(x + self.data.insets.left, y + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
 }

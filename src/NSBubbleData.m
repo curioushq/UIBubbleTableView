@@ -22,7 +22,7 @@
 
 @synthesize date = _date;
 @synthesize type = _type;
-@synthesize bubbleDataView = _bubbleDataView;
+@synthesize view = _view;
 @synthesize insets = _insets;
 @synthesize avatar = _avatar;
 @synthesize avatarLabelStr = _avatarLabelStr;
@@ -34,8 +34,8 @@
 {
     [_date release];
 	_date = nil;
-    [_bubbleDataView release];
-    _bubbleDataView = nil;
+    [_view release];
+    _view = nil;
     
     self.avatar = nil;
     self.avatarLabelStr = nil;
@@ -298,7 +298,7 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     if (self)
     {
 #if !__has_feature(objc_arc)
-        _bubbleDataView = [view retain];
+        _view = [view retain];
         _date = [date retain];
 #else
         _view = view;

@@ -86,7 +86,7 @@ static CGFloat const BubbleElementPadding = 5.f;
         elementPadding = BubbleElementPadding;
     }
     
-    float numberA = data.insets.top + data.bubbleDataView.frame.size.height + data.insets.bottom;
+    float numberA = data.insets.top + data.view.frame.size.height + data.insets.bottom;
     float numberB = showAvatar ? BubbleAvatarImageSize : 0;
 
     return ( MAX (numberA, numberB) + avatarLabel + elementPadding);
@@ -113,8 +113,8 @@ static CGFloat const BubbleElementPadding = 5.f;
     
     NSBubbleType type = self.data.type;
     
-    CGFloat width = self.data.bubbleDataView.frame.size.width;
-    CGFloat height = self.data.bubbleDataView.frame.size.height;
+    CGFloat width = self.data.view.frame.size.width;
+    CGFloat height = self.data.view.frame.size.height;
 
     CGFloat left = (type == BubbleTypeSomeoneElse) ? BubbleBorderPadding : self.frame.size.width - width - self.data.insets.left - self.data.insets.right - BubbleBorderPadding;
     CGFloat bottom = [[self class] heightForData:self.data showAvatar:self.showAvatar] - BubbleElementPadding;
@@ -175,13 +175,13 @@ static CGFloat const BubbleElementPadding = 5.f;
         self.avatarLabel.hidden = YES;
     }
     
-    CGFloat delta = self.data.insets.top + self.data.insets.bottom + self.data.bubbleDataView.frame.size.height;
+    CGFloat delta = self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height;
     if (delta > 0) bottom -= delta;
     
 
 
     [self.customView removeFromSuperview];
-    self.customView = self.data.bubbleDataView;
+    self.customView = self.data.view;
     self.customView.frame = CGRectMake(left + self.data.insets.left, bottom + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
 
