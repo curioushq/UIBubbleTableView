@@ -143,6 +143,7 @@ static CGFloat const BubbleElementPadding = 5.f;
         }
         else
         {
+            self.avatarLabel.textAlignment = NSTextAlignmentLeft;
             self.avatarLabel.frame = CGRectMake(left, bottom, 200, BubbleAvatarLabelHeight);
         }
     }
