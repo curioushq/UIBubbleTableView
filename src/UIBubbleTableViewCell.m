@@ -77,11 +77,11 @@ static CGFloat const BubbleElementPadding = 5.f;
 {
     float avatarLabel = 0;
     float elementPadding = 0;
-    if (data.avatarLabelStr != nil && data.type == BubbleTypeSomeoneElse)
+    if ((data.avatarLabelStr != nil && data.isChat) || (data.isPrivate))
     {
         avatarLabel = BubbleAvatarLabelHeight;
     }
-    if (data.type == BubbleTypeMine || data.type == BubbleTypeSomeoneElse)
+    if (data.isChat)
     {
         elementPadding = BubbleElementPadding;
     }
@@ -116,10 +116,10 @@ static CGFloat const BubbleElementPadding = 5.f;
     CGFloat width = self.data.view.frame.size.width;
     CGFloat height = self.data.view.frame.size.height;
 
-    CGFloat left = (type == BubbleTypeSomeoneElse) ? BubbleBorderPadding : self.frame.size.width - width - self.data.insets.left - self.data.insets.right - BubbleBorderPadding;
+    CGFloat left = (self.data.isChatSomeoneElse) ? BubbleBorderPadding : self.frame.size.width - width - self.data.insets.left - self.data.insets.right - BubbleBorderPadding;
     CGFloat bottom = [[self class] heightForData:self.data showAvatar:self.showAvatar] - BubbleElementPadding;
     
-    if (self.data.avatarLabelStr != nil && type == BubbleTypeSomeoneElse)
+    if (self.data.avatarLabelStr != nil)
     {
         if(self.avatarLabel == nil)
         {
@@ -135,8 +135,16 @@ static CGFloat const BubbleElementPadding = 5.f;
         self.avatarLabel.backgroundColor = [UIColor clearColor];
 
         bottom -= BubbleAvatarLabelHeight;
-        self.avatarLabel.frame = CGRectMake(left, bottom, 200, BubbleAvatarLabelHeight);
         
+        if (self.data.isChatMine)
+        {
+            self.avatarLabel.textAlignment = NSTextAlignmentRight;
+            self.avatarLabel.frame = CGRectMake(self.frame.size.width - BubbleBorderPadding - 200, bottom, 200, BubbleAvatarLabelHeight);
+        }
+        else
+        {
+            self.avatarLabel.frame = CGRectMake(left, bottom, 200, BubbleAvatarLabelHeight);
+        }
     }
     
     // Adjusting the x coordinate for avatar
@@ -160,14 +168,14 @@ static CGFloat const BubbleElementPadding = 5.f;
         self.avatarImage.layer.cornerRadius = 4.0;
         self.avatarImage.layer.masksToBounds = YES;
 
-        CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? left : self.frame.size.width - BubbleAvatarImageSize - BubbleBorderPadding;
+        CGFloat avatarX = (type == BubbleTypeSomeoneElse || type == BubbleTypeSomeoneElsePrivate) ? left : self.frame.size.width - BubbleAvatarImageSize - BubbleBorderPadding;
         CGFloat avatarY = bottom - BubbleAvatarImageSize;
         
         self.avatarImage.frame = CGRectMake(avatarX, avatarY, BubbleAvatarImageSize, BubbleAvatarImageSize);
         
         
-        if (type == BubbleTypeSomeoneElse) left += BubbleAvatarImageSize + BubbleElementPadding;
-        if (type == BubbleTypeMine) left -= BubbleAvatarImageSize + BubbleElementPadding;
+        if (type == BubbleTypeSomeoneElse || type == BubbleTypeSomeoneElsePrivate) left += BubbleAvatarImageSize + BubbleElementPadding;
+        if (type == BubbleTypeMine || type == BubbleTypeMinePrivate) left -= BubbleAvatarImageSize + BubbleElementPadding;
     }
     else
     {
@@ -185,14 +193,23 @@ static CGFloat const BubbleElementPadding = 5.f;
     self.customView.frame = CGRectMake(left + self.data.insets.left, bottom + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
 
-
-    if (type == BubbleTypeSomeoneElse)
+    if (type == BubbleTypeMinePrivate)
+    {
+        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMinePrivate"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleMinePrivateSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
+    }
+    else if (type == BubbleTypeSomeoneElsePrivate)
+    {
+        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeonePrivate"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
+        self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleSomeonePrivateSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
+    }
+    else if (type == BubbleTypeSomeoneElse)
     {
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
         self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleSomeoneSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 24, 18, 18)];
-        
     }
-    else {
+    else
+    {
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
         self.bubbleImage.highlightedImage = [[UIImage imageNamed:@"bubbleMineSelected"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 24)];
     }

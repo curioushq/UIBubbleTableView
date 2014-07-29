@@ -13,10 +13,12 @@
 typedef enum _NSBubbleType
 {
     BubbleTypeMine = 0,
-    BubbleTypeSomeoneElse = 1,
-    BubbleTypeNotification = 2,
-    BubbleTypeReceiptMine,
-    BubbleTypeReceiptSomeone
+    BubbleTypeMinePrivate = 1,
+    BubbleTypeSomeoneElse = 2,
+    BubbleTypeSomeoneElsePrivate = 3,
+    BubbleTypeNotification = 4,
+    BubbleTypeReceiptMine = 5,
+    BubbleTypeReceiptSomeone = 6
 } NSBubbleType;
 
 @interface NSBubbleData : NSObject
@@ -36,5 +38,10 @@ typedef enum _NSBubbleType
 + (id)dataWithImage:(UIImage *)image date:(NSDate *)date type:(NSBubbleType)type;
 - (id)initWithView:(UIView *)view date:(NSDate *)date type:(NSBubbleType)type insets:(UIEdgeInsets)insets;
 + (id)dataWithView:(UIView *)view date:(NSDate *)date type:(NSBubbleType)type insets:(UIEdgeInsets)insets;
+
+- (bool)isChat;
+- (bool)isChatMine;
+- (bool)isChatSomeoneElse;
+- (bool)isPrivate;
 
 @end
