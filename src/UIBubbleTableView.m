@@ -97,7 +97,7 @@
 	self.bubbleSection = nil;
     
     // Loading new data
-    int count = 0;
+    NSInteger count = 0;
 #if !__has_feature(objc_arc)
     self.bubbleSection = [[[NSMutableArray alloc] init] autorelease];
 #else
@@ -158,7 +158,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    int result = [self.bubbleSection count];
+    NSInteger result = [self.bubbleSection count];
     if (self.typingBubble != NSBubbleTypingTypeNobody) result++;
     return result;
 }
@@ -171,7 +171,7 @@
     return [[self.bubbleSection objectAtIndex:section] count] + 1;
 }
 
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Now typing
 	if (indexPath.section >= [self.bubbleSection count])

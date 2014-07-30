@@ -127,7 +127,7 @@ const UIEdgeInsets textInsetsReadReceipt = {0, 10, 5, 10};
 #endif
     
     UIEdgeInsets insets = textInsetsMine;
-    if (type == BubbleTypeSomeoneElse)
+    if (type == BubbleTypeSomeoneElse || type == BubbleTypeSomeoneElsePrivate)
     {
         insets = textInsetsSomeone;
     }
@@ -154,6 +154,8 @@ const UIEdgeInsets textInsetsReadReceipt = {0, 10, 5, 10};
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type
 {
+    _type = type;
+
     if (text == nil)
     {
         text = @"";
@@ -228,7 +230,7 @@ const UIEdgeInsets textInsetsReadReceipt = {0, 10, 5, 10};
 #endif
     
     UIEdgeInsets insets = textInsetsMine;
-    if (type == BubbleTypeSomeoneElse)
+    if (type == BubbleTypeSomeoneElse || type == BubbleTypeSomeoneElsePrivate)
     {
         insets = textInsetsSomeone;
     }
@@ -320,5 +322,26 @@ didSelectTextCheckingResult:(NSTextCheckingResult *)result atPoint:(CGPoint)poin
         [[UIApplication sharedApplication] openURL:result.URL.absoluteURL];
     }
 }
+
+- (bool)isChat
+{
+    return self.isChatMine || self.isChatSomeoneElse;
+}
+
+- (bool)isChatMine
+{
+    return (self.type == BubbleTypeMine || self.type == BubbleTypeMinePrivate);
+}
+
+- (bool)isChatSomeoneElse
+{
+    return (self.type == BubbleTypeSomeoneElse || self.type == BubbleTypeSomeoneElsePrivate);
+}
+
+- (bool)isPrivate
+{
+    return (self.type == BubbleTypeMinePrivate || self.type == BubbleTypeSomeoneElsePrivate);
+}
+
 
 @end
